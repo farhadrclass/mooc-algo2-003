@@ -61,5 +61,22 @@ class TestSequenceFunctions(unittest.TestCase):
         node = random.choice(heap.node_array)
         self.assertTrue(heap[node.name] == node)
 
+    def test_Heap_insert(self):
+        heap = Heap([(int(x), str(x))
+                     for x in random.sample(xrange(0, 100), 10)])
+        node = Node(1000, "1000")
+        self.assertTrue(heap.is_heap_property_satisfied())
+        heap.insert(node)
+        self.assertTrue(heap.is_heap_property_satisfied())
+
+    def test_Heap_delete(self):
+        heap = Heap([(int(x), str(x))
+                     for x in random.sample(xrange(0, 100), 10)])
+        node = random.choice(heap.node_array)
+        self.assertTrue(heap.is_heap_property_satisfied())
+        heap.delete(node)
+        self.assertTrue(heap.is_heap_property_satisfied())
+
+
 if __name__ == '__main__':
     unittest.main()

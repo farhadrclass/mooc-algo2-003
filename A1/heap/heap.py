@@ -73,18 +73,21 @@ class Heap(object):
     def node_lookup(self, value):
         self._node_lookup = value
 
-    def __repr__(self):
-        if self.named:
-            return str([(node.key, node.name) for node in self.node_array])
-        else:
-            return str([node.key for node in self.node_array])
-        return
+    # def __repr__(self):
+    #     if self.named:
+    #         return str([(node.key, node.name) for node in self.node_array])
+    #     else:
+    #         return str([node.key for node in self.node_array])
+    #     return
 
     def __getitem__(self, key):
         return self.node_array[self._node_lookup[key]]
 
     def __len__(self):
         return len(self.array)
+
+    def __str__(self):
+        return str([(node.name, node.key) for node in self.node_array])
 
     # def get_pos(self, name):
         # lookup_table = self._node_lookup
@@ -102,12 +105,13 @@ class Heap(object):
     def insert(self, node):
         node.pos = len(self.node_array)
         self.node_array.append(node)
-        self.bubble_up()
+        self.bubble_up(node.pos)
         pass
 
     def delete(self, node):
-        self.swap_nodes
-        pass
+        self.swap_nodes(node, self.node_array[-1])
+        self.node_array.pop()
+        self.bubble_down(node.pos)
 
     def swap_nodes(self, node1, node2):
         node1.pos, node2.pos = node2.pos, node1.pos
@@ -144,12 +148,6 @@ class Heap(object):
                     self.swap_nodes(parent_node, right_child_node)
                 parent_pos = parent_node.pos
                 continue
-
-    def delete(self):
-        pass
-
-    def return_min(self):
-        pass
 
     def max_num_parents(self):
         return int(math.pow(2, math.floor(math.log(len(self.node_array), 2))) - 1)
