@@ -4,12 +4,13 @@ from heap.heap import Node, Heap
 import random
 import unittest
 
+
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
         self.heap = Heap([(int(x), str(x))
-                     for x in random.sample(xrange(10, 90), 10)])
-        pass
+                          for x in random.sample(xrange(10, 90), 10)])
+
         # self.file_name = 'edges.txt'
         # self.num_nodes, self.num_edges, self.node_matrix = load_data(
         #     self.file_name)
@@ -18,7 +19,7 @@ class TestSequenceFunctions(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_Node(self):
+    def test_Node_init(self):
         node = Node(name="name", key="key")
         node.pos = 0
         self.assertTrue(
@@ -29,11 +30,12 @@ class TestSequenceFunctions(unittest.TestCase):
         node2 = Node(1, "node2")
         self.assertTrue(node2 < node1)
 
-    def test_Heap(self):
+    def test_Heap_init(self):
         node1 = (20, "node1")
         node2 = (1, "node2")
         self.heap = Heap([node1, node2], named=True)
-        self.assertTrue(self.heap["node1"].pos == 1 and self.heap["node2"].pos == 0)
+        self.assertTrue(
+            self.heap["node1"].pos == 1 and self.heap["node2"].pos == 0)
 
     def test_Heap_bubble_up(self):
 

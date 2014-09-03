@@ -3,6 +3,7 @@ import numpy
 import random
 from collections import defaultdict
 
+
 class Node(object):
 
     def __init__(self, key=None, name=None):
@@ -44,7 +45,8 @@ class Node(object):
         return self.key < other.key
 
     def __eq__(self, other):
-        return [getattr(self, var) == getattr(other,var) for var in vars(self)]
+        return [getattr(self, var) == getattr(other, var) for var in vars(self)]
+
 
 class Heap(object):
 
@@ -73,13 +75,6 @@ class Heap(object):
     def node_lookup(self, value):
         self._node_lookup = value
 
-    # def __repr__(self):
-    #     if self.named:
-    #         return str([(node.key, node.name) for node in self.node_array])
-    #     else:
-    #         return str([node.key for node in self.node_array])
-    #     return
-
     def __getitem__(self, key):
         return self.node_array[self._node_lookup[key]]
 
@@ -88,9 +83,6 @@ class Heap(object):
 
     def __str__(self):
         return str([(node.name, node.key) for node in self.node_array])
-
-    # def get_pos(self, name):
-        # lookup_table = self._node_lookup
 
     def heapify(self):
         self.node_array = sorted(self.node_array, key=lambda node: node.key)
@@ -117,7 +109,8 @@ class Heap(object):
     def swap_nodes(self, node1, node2):
         node1.pos, node2.pos = node2.pos, node1.pos
         self.node_array[node1.pos], self.node_array[node2.pos] = node1, node2
-        self.node_lookup[node1.name], self.node_lookup[node2.name] = node1.pos, node2.pos
+        self.node_lookup[node1.name], self.node_lookup[
+            node2.name] = node1.pos, node2.pos
 
     def bubble_up(self, child_pos=None):
         if child_pos is None:
