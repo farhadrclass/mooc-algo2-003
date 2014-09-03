@@ -11,11 +11,6 @@ class TestSequenceFunctions(unittest.TestCase):
         self.heap = Heap([(int(x), str(x))
                           for x in random.sample(xrange(10, 90), 10)])
 
-        # self.file_name = 'edges.txt'
-        # self.num_nodes, self.num_edges, self.node_matrix = load_data(
-        #     self.file_name)
-        # self.graph = generate_graph(self.node_matrix)
-
     def tearDown(self):
         pass
 
@@ -73,6 +68,11 @@ class TestSequenceFunctions(unittest.TestCase):
         self.heap.delete(node)
         self.assertTrue(self.heap.is_heap_property_satisfied())
 
+    def test_Heap_pop(self):
+        min_node = self.heap.node_array[0]
+        popped_node = self.heap.pop()
+        self.assertTrue(self.heap.is_heap_property_satisfied())
+        self.assertTrue(popped_node == min_node)
 
 if __name__ == '__main__':
     unittest.main()

@@ -106,6 +106,12 @@ class Heap(object):
         self.node_array.pop()
         self.bubble_down(node_pos)
 
+    def pop(self):
+        node = self.node_array[0]
+        self.delete(node)
+        return node
+
+
     def swap_nodes(self, node1, node2):
         node1.pos, node2.pos = node2.pos, node1.pos
         self.node_array[node1.pos], self.node_array[node2.pos] = node1, node2
@@ -131,17 +137,24 @@ class Heap(object):
         max_num_parents = self.max_num_parents()
         while parent_pos < max_num_parents:
             parent_node = self.node_array[parent_pos]
-            left_child_node, right_child_node = self.get_children(parent_node)
-
-            if (parent_node < left_child_node) and (parent_node < right_child_node):
+            children = self.get_children(parent_node)
+            if not children:
                 break
-            else:
-                if left_child_node < right_child_node:
+            elif len(children) == 1:
+                child_node = children[0]
+                if parent_node < child_node:
+                    break
+                else:
+                    self.swap_nodes(parent_node, left_child_node)
+            elif len(children) == 2:
+                left_child_node, right_child_node = children
+                if (parent_node < left_child_node) and (parent_node < right_child_node):
+                    break
+                elif left_child_node < right_child_node:
                     self.swap_nodes(parent_node, left_child_node)
                 else:
                     self.swap_nodes(parent_node, right_child_node)
-                parent_pos = parent_node.pos
-                continue
+            parent_pos = parent_node.pos
 
     def max_num_parents(self):
         return int(math.pow(2, math.floor(math.log(len(self.node_array), 2))) - 1)
