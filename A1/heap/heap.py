@@ -109,9 +109,10 @@ class Heap(object):
         pass
 
     def delete(self, node):
+        node_pos = node.pos
         self.swap_nodes(node, self.node_array[-1])
         self.node_array.pop()
-        self.bubble_down(node.pos)
+        self.bubble_down(node_pos)
 
     def swap_nodes(self, node1, node2):
         node1.pos, node2.pos = node2.pos, node1.pos

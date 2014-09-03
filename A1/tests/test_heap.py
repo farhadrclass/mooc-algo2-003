@@ -7,6 +7,8 @@ import unittest
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
+        self.heap = Heap([(int(x), str(x))
+                     for x in random.sample(xrange(10, 90), 10)])
         pass
         # self.file_name = 'edges.txt'
         # self.num_nodes, self.num_edges, self.node_matrix = load_data(
@@ -30,52 +32,44 @@ class TestSequenceFunctions(unittest.TestCase):
     def test_Heap(self):
         node1 = (20, "node1")
         node2 = (1, "node2")
-        heap = Heap([node1, node2], named=True)
-        self.assertTrue(heap["node1"].pos == 1 and heap["node2"].pos == 0)
+        self.heap = Heap([node1, node2], named=True)
+        self.assertTrue(self.heap["node1"].pos == 1 and self.heap["node2"].pos == 0)
 
     def test_Heap_bubble_up(self):
-        heap = Heap([(int(x), str(x))
-                     for x in random.sample(xrange(10, 100), 10)])
-        node = Node(1, "1")
-        node.pos = len(heap.node_array)
-        heap.node_array.append(node)
 
-        self.assertFalse(heap.is_heap_property_satisfied())
-        heap.bubble_up()
-        self.assertTrue(heap.is_heap_property_satisfied())
+        node = Node(1, "1")
+        node.pos = len(self.heap.node_array)
+        self.heap.node_array.append(node)
+
+        self.assertFalse(self.heap.is_heap_property_satisfied())
+        self.heap.bubble_up()
+        self.assertTrue(self.heap.is_heap_property_satisfied())
 
     def test_Heap_bubble_down(self):
-        heap = Heap([(int(x), str(x))
-                     for x in random.sample(xrange(0, 90), 10)])
         node = Node(100, "100")
         node.pos = 0
-        heap.node_array[0] = node
+        self.heap.node_array[0] = node
 
-        self.assertFalse(heap.is_heap_property_satisfied())
-        heap.bubble_down()
-        self.assertTrue(heap.is_heap_property_satisfied())
+        self.assertFalse(self.heap.is_heap_property_satisfied())
+        self.heap.bubble_down()
+        self.assertTrue(self.heap.is_heap_property_satisfied())
 
     def test_Heap_getitem(self):
-        heap = Heap([(int(x), str(x))
-                     for x in random.sample(xrange(0, 100), 10)])
-        node = random.choice(heap.node_array)
-        self.assertTrue(heap[node.name] == node)
+        node = random.choice(self.heap.node_array)
+        self.assertTrue(self.heap[node.name] == node)
 
     def test_Heap_insert(self):
-        heap = Heap([(int(x), str(x))
-                     for x in random.sample(xrange(0, 100), 10)])
         node = Node(1000, "1000")
-        self.assertTrue(heap.is_heap_property_satisfied())
-        heap.insert(node)
-        self.assertTrue(heap.is_heap_property_satisfied())
+        self.assertTrue(self.heap.is_heap_property_satisfied())
+        self.heap.insert(node)
+        self.assertTrue(self.heap.is_heap_property_satisfied())
 
     def test_Heap_delete(self):
-        heap = Heap([(int(x), str(x))
-                     for x in random.sample(xrange(0, 100), 10)])
-        node = random.choice(heap.node_array)
-        self.assertTrue(heap.is_heap_property_satisfied())
-        heap.delete(node)
-        self.assertTrue(heap.is_heap_property_satisfied())
+        node = random.choice(self.heap.node_array)
+
+        self.assertTrue(self.heap.is_heap_property_satisfied())
+        self.heap.delete(node)
+        self.assertTrue(self.heap.is_heap_property_satisfied())
 
 
 if __name__ == '__main__':
