@@ -111,6 +111,9 @@ class Heap(object):
         self.delete(node)
         return node
 
+    def node_names(self):
+        return self.node_lookup.keys()
+
 
     def swap_nodes(self, node1, node2):
         node1.pos, node2.pos = node2.pos, node1.pos
