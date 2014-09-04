@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+"""
+    test_heap.py
+    ~~~~~~~~~~~~
+    Tests for heap.py to ensure it implements insert, delete, pop operations correctly while maintaining the heap invariant that all parent nodes < children nodes.
+
+"""
+
 from heap.heap import Node, Heap
 import random
 import unittest
@@ -10,9 +17,6 @@ class TestSequenceFunctions(unittest.TestCase):
     def setUp(self):
         self.heap = Heap([(int(x), str(x))
                           for x in random.sample(xrange(10, 90), 10)])
-
-    def tearDown(self):
-        pass
 
     def _test_Node_init(self):
         node = Node(name="name", key="key")
@@ -90,7 +94,7 @@ class TestSequenceFunctions(unittest.TestCase):
     def test_Heap_update_key(self):
         node = random.choice(self.heap.node_array)
         node_name = node.name
-        new_key = random.choice(xrange(0,1000))
+        new_key = random.choice(xrange(0, 1000))
         self.heap.update_key(node_name, new_key)
         self.assertTrue(self.heap.is_heap_property_satisfied())
 
