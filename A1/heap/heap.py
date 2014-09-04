@@ -45,7 +45,7 @@ class Node(object):
         return self.key < other.key
 
     def __eq__(self, other):
-        return all([getattr(self, var) == getattr(other, var) for var in vars(self)])
+        return self.key == other.key
 
 
 class Heap(object):
@@ -75,14 +75,17 @@ class Heap(object):
     def node_lookup(self, value):
         self._node_lookup = value
 
+    def __repr__(self, key):
+        return self.node_array
+
     def __getitem__(self, key):
-        return self.node_array[self._node_lookup[key]]
+        return self.node_array[self.node_lookup[key]]
 
     def __len__(self):
-        return len(self.array)
+        return len(self.node_array)
 
     def __str__(self):
-        return str(self.node_keys())
+        return str([(node.name, node.key) for node in self.node_array])
 
     def heapify(self):
         self.node_array = sorted(self.node_array, key=lambda node: node.key)
@@ -97,13 +100,14 @@ class Heap(object):
     def insert(self, node):
         node.pos = len(self.node_array)
         self.node_array.append(node)
+        self.node_lookup[node.name] = node.pos
         self.bubble_up(node.pos)
         pass
 
-    def update_key(self, node, key):
-        node.key = key
-        self.bubble_up(node)
-        self.bubble_down(node)
+    def update_key(self, node_name, key):
+        self[node_name].key = key
+        self.bubble_up(self[node_name].pos)
+        self.bubble_down(self[node_name].pos)
 
     def delete(self, node):
 
@@ -111,9 +115,11 @@ class Heap(object):
             original_pos = node.pos
             self.swap_nodes(node, self.node_array[-1])
             self.node_array.pop()
+            self.node_lookup.pop(node.name, None)
             self.bubble_down(original_pos)
         else:
             self.node_array.pop()
+
 
 
     def pop(self):
@@ -137,10 +143,10 @@ class Heap(object):
     def bubble_up(self, child_pos=None):
         if child_pos is None:
             child_pos = len(self.node_array) - 1
-
-        child_node = self.node_array[child_pos]
-        while child_node.pos > 0:
-            parent_pos = (child_node.pos+1) // 2 - 1
+        child_name = self.node_array[child_pos].name
+        while self[child_name].pos > 0:
+            child_node = self[child_name]
+            parent_pos = (self[child_name].pos+1) // 2 - 1
             parent_node = self.node_array[parent_pos]
 
             if child_node.key <= parent_node.key:
@@ -150,12 +156,11 @@ class Heap(object):
                 break
 
     def bubble_down(self, parent_pos=0):
-        max_num_parents = self.max_num_parents()
         parent_node = self.node_array[parent_pos]
-        while parent_node.pos < max_num_parents:
+        while parent_node.pos < self.max_num_parents():
             children = self.get_children(parent_node)
 
-            if all(parent_node.key < child_node.key for child_node in children):
+            if all(parent_node.key <= child_node.key for child_node in children):
                 break
             elif len(children) == 1:
                 self.swap_nodes(parent_node, children[0])
@@ -166,7 +171,10 @@ class Heap(object):
         return int(math.pow(2, math.floor(math.log(len(self.node_array), 2))) - 1)
 
     def get_children(self, parent_node):
+        children_nodes = []
         parent_pos = parent_node.pos
+        if parent_pos > self.max_num_parents():
+            return children_nodes
         left_child_pos = (parent_pos + 1) * 2 - 1
         right_child_pos = (parent_pos + 1) * 2
 
@@ -185,7 +193,7 @@ class Heap(object):
             children_nodes = self.get_children(parent_node)
             if self.mode == 'min':
                 for child_node in children_nodes:
-                    if parent_node > child_node:
+                    if parent_node.key > child_node.key:
                         return False
         else:
             return True

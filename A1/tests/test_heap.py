@@ -37,6 +37,7 @@ class TestSequenceFunctions(unittest.TestCase):
         node = Node(1, "1")
         node.pos = len(self.heap.node_array)
         self.heap.node_array.append(node)
+        self.heap.node_lookup[node.name] = node.pos
 
         self.assertFalse(self.heap.is_heap_property_satisfied())
         self.heap.bubble_up()
@@ -88,7 +89,10 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_Heap_update_key(self):
         node = random.choice(self.heap.node_array)
+        node_name = node.name
         new_key = random.choice(xrange(0,1000))
+        self.heap.update_key(node_name, new_key)
+        self.assertTrue(self.heap.is_heap_property_satisfied())
 
 
 if __name__ == '__main__':
