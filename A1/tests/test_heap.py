@@ -14,18 +14,18 @@ class TestSequenceFunctions(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_Node_init(self):
+    def _test_Node_init(self):
         node = Node(name="name", key="key")
         node.pos = 0
         self.assertTrue(
             all((node.name == "name", node.key == "key", node.pos == 0)))
 
-    def test_Node_cmp(self):
+    def _test_Node_cmp(self):
         node1 = Node(20, "node1")
         node2 = Node(1, "node2")
         self.assertTrue(node2 < node1)
 
-    def test_Heap_init(self):
+    def _test_Heap_init(self):
         node1 = (20, "node1")
         node2 = (1, "node2")
         self.heap = Heap([node1, node2], named=True)
@@ -61,9 +61,21 @@ class TestSequenceFunctions(unittest.TestCase):
         self.heap.insert(node)
         self.assertTrue(self.heap.is_heap_property_satisfied())
 
-    def test_Heap_delete(self):
+    def test_Heap_delete_first(self):
         node = random.choice(self.heap.node_array)
+        node = self.heap.node_array[0]
+        self.assertTrue(self.heap.is_heap_property_satisfied())
+        self.heap.delete(node)
+        self.assertTrue(self.heap.is_heap_property_satisfied())
 
+    def test_Heap_delete_last(self):
+        node = self.heap.node_array[-1]
+        self.assertTrue(self.heap.is_heap_property_satisfied())
+        self.heap.delete(node)
+        self.assertTrue(self.heap.is_heap_property_satisfied())
+
+    def test_Heap_delete_random(self):
+        node = random.choice(self.heap.node_array)
         self.assertTrue(self.heap.is_heap_property_satisfied())
         self.heap.delete(node)
         self.assertTrue(self.heap.is_heap_property_satisfied())
@@ -73,6 +85,11 @@ class TestSequenceFunctions(unittest.TestCase):
         popped_node = self.heap.pop()
         self.assertTrue(self.heap.is_heap_property_satisfied())
         self.assertTrue(popped_node == min_node)
+
+    def test_Heap_update_key(self):
+        node = random.choice(self.heap.node_array)
+        new_key = random.choice(xrange(0,1000))
+
 
 if __name__ == '__main__':
     unittest.main()
