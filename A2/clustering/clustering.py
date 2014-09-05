@@ -1,3 +1,11 @@
+"""
+    clustering.py
+    ~~~~~~~~~~~~
+    Implements UnionFind datastructure supporting the following operations:
+        - find in O(1) time
+        - union in O(logE) time, where E is # edges
+"""
+
 from collections import defaultdict
 
 
