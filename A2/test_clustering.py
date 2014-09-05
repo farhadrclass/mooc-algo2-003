@@ -32,4 +32,6 @@ def generate_graph(node_matrix):
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
+        self.node_matrix = load_data('./data/clustering1.txt')
+        self.graph = generate_graph(self.node_matrix)
         pass
