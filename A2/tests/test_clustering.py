@@ -28,6 +28,4 @@ class TestSequenceFunctions(unittest.TestCase):
         union_find = UnionFind(nodes)
         leader1, leader2 = random.sample(nodes, 2)
         union_find.union(leader1, leader2)
-        print leader1, leader2
-        print union_find.set_lookup
-        self.assertTrue
+        self.assertTrue(union_find.set_lookup[leader1] == [leader1, leader2])
