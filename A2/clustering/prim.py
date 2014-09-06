@@ -7,12 +7,9 @@
 
 """
 
-from heap import Node, Heap
+from heap import Heap
 from collections import defaultdict
-import numpy
 import random
-import unittest
-
 
 
 def prim(graph):
@@ -47,6 +44,7 @@ def prim(graph):
                     crossing_cuts.update_key(node_name, new_key)
 
     return mst
+
 
 def get_mst_total_weight(graph):
     total_cost = 0
