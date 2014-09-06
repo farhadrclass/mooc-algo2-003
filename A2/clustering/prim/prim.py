@@ -19,7 +19,7 @@ def prim(graph):
     """
     Implements Prim's Minimum Spanning Tree Algorithm in O(VlogE) time with a min heap.
     """
-    minimum_spanning_tree = defaultdict(dict)
+    mst = defaultdict(dict)
     initial_node = random.choice(graph.keys())
 
     # Initialize minimum heap to contain the nodes of the graph, whose keys
@@ -36,17 +36,17 @@ def prim(graph):
     while crossing_cuts:
         smallest_node = crossing_cuts.pop()
         (node_out, (weight, node_in)) = smallest_node.name, smallest_node.key
-        minimum_spanning_tree[node_in][node_out] = weight
-        minimum_spanning_tree[node_out][node_in] = weight
+        mst[node_in][node_out] = weight
+        mst[node_out][node_in] = weight
 
-        for node_name in (set(graph[node_out].keys()) - set(minimum_spanning_tree.keys())):
+        for node_name in (set(graph[node_out].keys()) - set(mst.keys())):
             new_key = (graph[node_out][node_name], node_out)
             if node_name in crossing_cuts.node_names():
                 old_key = crossing_cuts[node_name].key
                 if new_key[0] < old_key[0]:
                     crossing_cuts.update_key(node_name, new_key)
 
-    return minimum_spanning_tree
+    return mst
 
 def get_mst_total_weight(graph):
     total_cost = 0
