@@ -1,21 +1,20 @@
 #!/usr/bin/env python
 
 """
-    test_clustering.py
+    test_q1.py
     ~~~~~~~~~~~~
 
 """
 
+from collections import defaultdict
+import numpy
 import unittest
+
 
 def load_data(file_name, skiprows=1):
     """ Returns matrix of  node and edges from .txt file"""
-    with open(file_name, 'r') as f:
-        num_nodes, num_edges = [int(n) for n in f.readline().strip().split()]
+    return numpy.loadtxt(file_name, skiprows=skiprows)
 
-    node_matrix = numpy.loadtxt(file_name, skiprows=skiprows)
-
-    return node_matrix
 
 def generate_graph(node_matrix):
     """Takes as input a matrix where rows are edges and columns are [node1 node2 weight]"""
@@ -34,4 +33,7 @@ class TestSequenceFunctions(unittest.TestCase):
     def setUp(self):
         self.node_matrix = load_data('./data/clustering1.txt')
         self.graph = generate_graph(self.node_matrix)
+        pass
+
+    def _test(self):
         pass

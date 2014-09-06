@@ -21,22 +21,37 @@ class UnionFind(object):
         """
         self.leader_lookup = {node: node for node in nodes}
         self.set_lookup = {node: [node] for node in nodes}
-    pass
 
-    def union(leader1, leader2):
+    @property
+    def leader_lookup(self):
+        return self._leader_lookup
+    @leader_lookup.setter
+    def leader_lookup(self, value):
+        self._leader_lookup = value
+
+    @property
+    def set_lookup(self):
+        return self._set_lookup
+    @set_lookup.setter
+    def set_lookup(self, value):
+        self._set_lookup = value
+
+
+
+    def union(self, leader1, leader2):
         "Merges the sets of leader1 and leader 2, taking the new leader to be the larger of the two"
         size_leader1 = len(self.set_lookup[leader1])
         size_leader2 = len(self.set_lookup[leader2])
 
         (new_leader, old_leader) = (leader1, leader2) if size_leader1 >= size_leader2 else (leader2, leader1)
 
-        old_set = self.set_lookup[old_leader]
-        self.set_lookup[new_leader].append(old_set)
+        old_set = self.set_lookup.pop(old_leader, [])
+        self.set_lookup[new_leader] += old_set
 
         for node in old_set:
             self.leader_lookup[node] = new_leader
 
-    def find(node):
+    def find(self, node):
         "Return the leader node which 'node' points to."
         return self.leader_lookup[node]
 
