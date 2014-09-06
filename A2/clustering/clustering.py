@@ -38,8 +38,11 @@ class UnionFind(object):
 
 
 
-    def union(self, leader1, leader2):
+    def union(self, node1, node2):
         "Merges the sets of leader1 and leader 2, taking the new leader to be the larger of the two"
+        leader1 = self.leader_lookup[node1]
+        leader2 = self.leader_lookup[node2]
+
         size_leader1 = len(self.set_lookup[leader1])
         size_leader2 = len(self.set_lookup[leader2])
 
@@ -56,6 +59,16 @@ class UnionFind(object):
         return self.leader_lookup[node]
 
 
-def kruskal(graph):
+def kruskal(node_list, edge_list):
+    edge_list.sort()
     mst = defaultdict(dict)  # minimum spanning tree
+    union_find = UnionFind(nodes=node_list)
+    for edge in edge_list:
+        weight, node1, node2 = edge
+        if union_find.find(node1) != union_find.find(node2):
+            union_find.union(node1, node2)
+            mst[node1][node2] = weight
+            mst[node2][node1] = weight
+        else:
+            continue
     return mst
