@@ -73,11 +73,10 @@ def maximum_k(node_list=[], node_length=24, maximum_spacing=3):
     for node1 in node_list:
         for i in xrange(1, maximum_spacing):
             for permutation in combinations(xrange(node_length), i):
-                binary_rep = list('{0:024b}'.format(node1))
+                node2 = node1
                 for pos in permutation:
-                    binary_rep[pos] = swap[binary_rep[pos]]
-                    node2 = int(string.join(binary_rep, ''), 2)
-                    if node2 in node_set:
-                        if union_find.find(node1) != union_find.find(node2):
-                            union_find.union(node1, node2)
+                    node2 ^= bitmasks[pos]
+                if node2 in node_set:
+                    if union_find.find(node1) != union_find.find(node2):
+                        union_find.union(node1, node2)
     return len(set(union_find.leader_lookup.values()))
