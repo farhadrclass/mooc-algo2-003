@@ -6,8 +6,11 @@
 
 """
 
-from collections import defaultdict
+from clustering import kruskal
+import array
 import numpy
+import string
+import sys
 import unittest
 
 
@@ -16,24 +19,55 @@ def load_data(file_name, skiprows=1):
     return numpy.loadtxt(file_name, skiprows=skiprows)
 
 
-def generate_graph(node_matrix):
-    """Takes as input a matrix where rows are edges and columns are [node1 node2 weight]"""
-    graph = defaultdict(dict)
+def generate_edge_list(file_name):
+    node_list = set()
+    edge_list = []
+    with open(file_name) as f:
+        num_nodes = int(f.readline().strip().split()[0])
+        for line in f:
+            node1, node2, weight = [int(n) for n in line.strip().split()]
+            node_list.add(node1)
+            node_list.add(node2)
+            edge_list.append((weight, node1, node2))
+    return node_list, edge_list
 
-    for item in node_matrix:
-        node1, node2, weight = [int(n) for n in item]
-        graph[node1][node2] = weight
-        graph[node2][node1] = weight
-
-    return graph
-
+def load_hamming(file_name):
+    node_array = array.array('I')
+    with open(file_name) as f:
+        num_nodes, node_length = [int(n) for n in f.readline().strip().split()]
+        for line in f:
+            node = int(string.join(line.strip().split(), ''), 2)
+            node_array.append(node)
+    return node_array, node_length
 
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.node_matrix = load_data('./data/clustering1.txt')
-        self.graph = generate_graph(self.node_matrix)
+        # self.node_matrix = load_data('./data/clustering1.txt')
+        # self.graph = generate_graph(self.node_matrix)
         pass
 
-    def _test(self):
-        pass
+    def _test_q1(self):
+        file_name = './data/clustering1.txt'
+        node_list, edge_list = generate_edge_list(file_name)
+        maximum_spacing = kruskal.maximum_spacing(node_list, edge_list, 4)
+        print maximum_spacing
+
+    def _test_q2_small1(self):
+        file_name = './data/clustering_small1.txt'
+        node_array, node_length = load_hamming(file_name)
+        max_k = kruskal.maximum_k(node_array, node_length=node_length)
+        print max_k
+
+    def _test_q2_small2(self):
+        file_name = './data/clustering_small2.txt'
+        node_array, node_length = load_hamming(file_name)
+        max_k = kruskal.maximum_k(node_array, node_length=node_length)
+        print max_k
+
+    def test_q2(self):
+        file_name = './data/clustering_big.txt'
+        node_array, node_length = load_hamming(file_name)
+        max_k = kruskal.maximum_k(node_array, node_length=node_length)
+        print max_k
+

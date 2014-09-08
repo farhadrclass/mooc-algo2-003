@@ -1,18 +1,15 @@
 """
-    clustering.py
+    union_find.py
     ~~~~~~~~~~~~
-
+    Implements UnionFind datastructure supporting the following operations:
+        - find in O(1) time
+        - union in O(logV) time, where V is # vertices
 """
 
 from collections import defaultdict
 
 
 class UnionFind(object):
-
-    """Implements UnionFind datastructure supporting the following operations:
-        - find in O(1) time
-        - union in O(logV) time, where V is # vertices
-    """
 
     def __init__(self, nodes=[]):
         """Inits leader and set lookup dictionaries:
@@ -25,6 +22,7 @@ class UnionFind(object):
     @property
     def leader_lookup(self):
         return self._leader_lookup
+
     @leader_lookup.setter
     def leader_lookup(self, value):
         self._leader_lookup = value
@@ -32,11 +30,10 @@ class UnionFind(object):
     @property
     def set_lookup(self):
         return self._set_lookup
+
     @set_lookup.setter
     def set_lookup(self, value):
         self._set_lookup = value
-
-
 
     def union(self, node1, node2):
         "Merges the sets of leader1 and leader 2, taking the new leader to be the larger of the two"
@@ -46,7 +43,8 @@ class UnionFind(object):
         size_leader1 = len(self.set_lookup[leader1])
         size_leader2 = len(self.set_lookup[leader2])
 
-        (new_leader, old_leader) = (leader1, leader2) if size_leader1 >= size_leader2 else (leader2, leader1)
+        (new_leader, old_leader) = (
+            leader1, leader2) if size_leader1 >= size_leader2 else (leader2, leader1)
 
         old_set = self.set_lookup.pop(old_leader, [])
         self.set_lookup[new_leader] += old_set
@@ -57,4 +55,3 @@ class UnionFind(object):
     def find(self, node):
         "Return the leader node which 'node' points to."
         return self.leader_lookup[node]
-
