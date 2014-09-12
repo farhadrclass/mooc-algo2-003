@@ -43,8 +43,7 @@ class UnionFind(object):
         size_leader1 = len(self.set_lookup[leader1])
         size_leader2 = len(self.set_lookup[leader2])
 
-        (new_leader, old_leader) = (
-            leader1, leader2) if size_leader1 >= size_leader2 else (leader2, leader1)
+        (new_leader, old_leader) = (leader1, leader2) if size_leader1 >= size_leader2 else (leader2, leader1)
 
         old_set = self.set_lookup.pop(old_leader, [])
         self.set_lookup[new_leader] += old_set
