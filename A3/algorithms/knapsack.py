@@ -32,12 +32,22 @@ def num_subproblems_naive(knapsack_size, items):
     return knapsack_size * len(items)
 
 def num_subproblems_smart(knapsack_size, items):
-    current_set = set(knapsack_size)
+    num_subproblems = 1
+    current_set = set([knapsack_size])
     previous_set = set()
 
-    for i in xrange(len(items)):
+    for i in reversed(xrange(1,len(items))):
+        for w_current in list(current_set):
+            w_previous = items[i][1]
+            previous_set.add(w_current)
 
+            if w_current-w_previous >= 0:
+                previous_set.add(w_current-w_previous)
+
+        num_subproblems += len(previous_set)
         current_set = previous_set
+    return num_subproblems
+
 
 
 
