@@ -6,7 +6,7 @@
     clear; python -m unittest discover -v
 
 """
-from algorithms import knapsack
+from algorithms import directed_graph as dg
 import unittest
 
 
@@ -15,78 +15,23 @@ import unittest
 
 class TestSequenceFunctions(unittest.TestCase):
 
-    def _test_small(self):
-        file_name = './data/knapsack_test.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        max_value = knapsack.knapsack_naive(knapsack_size, items)
-        print max_value
 
-    def _test_q1(self):
-        file_name = './data/knapsack1.txt'
-        knapsack_size, items = lknapsack.oad_data(file_name)
-        max_value = knapsack.knapsack_naive(knapsack_size, items)
-        print max_value
+    def test_dijkstra_small(self):
+        file_name = './data/dijkstraData_small.txt'
+        directed_graph  = dg.DirectedGraph(file_name=file_name)
+        shortest_path_lengths = directed_graph.dijkstra(source_node=1)
 
-    def _test_q2(self):
-        file_name = './data/knapsack_big.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        max_value = knapsack.knapsack_naive(knapsack_size, items)
-        print max_value
+        correct_answer = {1: 0, 2: 1, 3: 3, 4: 6}
+        self.assertTrue(shortest_path_lengths == correct_answer)
 
+    def test_dijkstra(self):
+        file_name = './data/dijkstraData.txt'
+        directed_graph  = dg.DirectedGraph(file_name=file_name)
+        shortest_path_lengths = directed_graph.dijkstra(source_node=1)
 
-    def test_num_subproblems_smart_small(self):
-        file_name = './data/knapsack_test.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        print items
-        num_subproblems = knapsack.num_subproblems_smart(knapsack_size, items)
-        print num_subproblems
+        nodes_of_interest = [7,37,59,82,99,115,133,165,188,197]
+        correct_answer = [2599,2610,2947,2052,2367,2399,2029,2442,2505,3068]
 
-    def _test_num_subproblems_smart_q2(self):
-        """# subproblems: 10623872.  max # subproblems for w = 0...capacity : 5421"""
-        file_name = './data/knapsack_big.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        num_subproblems = knapsack.num_subproblems_smart(knapsack_size, items)
-        print num_subproblems
+        calculated_answer =  [shortest_path_lengths[node] for node in nodes_of_interest]
+        self.assertTrue(calculated_answer==correct_answer)
 
-    def _test_num_subproblems_smart_q2_sorted(self):
-        """ # subproblems: 10587432 """
-        file_name = './data/knapsack_big.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        items = sorted(items)
-        num_subproblems = knapsack.num_subproblems_smart(knapsack_size, items)
-        print num_subproblems
-
-    def _test_num_subproblems_smart_q2_sorted_rev(self):
-        """ # subproblems: 10673022 """
-        file_name = './data/knapsack_big.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        items.sort()
-        items.reverse()
-        num_subproblems = knapsack.num_subproblems_smart(knapsack_size, items)
-        print num_subproblems
-
-
-
-    def _test_get_subproblems_smart_small(self):
-        file_name = './data/knapsack_test.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        print items
-        num_subproblems = knapsack.get_subproblems_smart(knapsack_size, items)
-        print num_subproblems
-    def _test_get_subproblems_smart_big(self):
-        file_name = './data/knapsack_big.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        num_subproblems = knapsack.get_subproblems_smart(knapsack_size, items)
-
-
-    def test_knapsack_smart_small(self):
-        file_name = './data/knapsack_test.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        max_value = knapsack.knapsack_smart(knapsack_size, items)
-        self.assertTrue(max_value, knapsack.knapsack_naive(knapsack_size, items))
-
-    def test_knapsack_smart_big(self):
-        file_name = './data/knapsack_big.txt'
-        knapsack_size, items = knapsack.load_data(file_name)
-        max_value = knapsack.knapsack_smart(knapsack_size, items)
-        print max_value
