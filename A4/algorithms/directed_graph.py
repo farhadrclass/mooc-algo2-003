@@ -27,22 +27,46 @@ class DirectedGraph(object):
             if file_format == "adjacency list":
                 self.graph = self.load_adjacency_list(file_name)
             elif file_format == "edge list":
-                self.num_nodes, self.num_edges, self.graph = self.load_edge_list(file_name=file_name)
+                self.num_nodes, self.num_edges, self.graph = self.load_edge_list(
+                    file_name=file_name)
 
     def __getitem__(self, key):
         return self.graph[key]
+
+    def __setitem__(self, key, item):
+        self.graph[key] = item
+
+    def __delitem__(self, key):
+        del self.graph[key]
 
     def __iter__(self):
         for head_node in self.graph:
             yield head_node
 
     def __len__(self):
+        """ Return number of all head/tail nodes in directed graph"""
         return len([x for x in self.nodes()])
 
+    def __str__(self):
+        return str(self.graph)\
+
+
+    def head_nodes(self):
+        """ iterator that yields all head nodes in graph """
+        for head_node in self.graph:
+            yield head_node
+
+    def tail_nodes(self):
+        """ iterator that yields all tail nodes in graph """
+        for head_node in self.graph:
+            for tail_node in self.graph[head_node]:
+                yield tail_node
+
     def nodes(self, graph=None):
+        """ iterator that yields all nodes in graph """
         node_list = []
         if graph is None:
-            graph = copy.deepcopy(self.graph)
+            graph = self.graph
         for head_node in self.graph:
             node_list.append(head_node)
             for tail_node in self.graph[head_node]:
@@ -51,6 +75,7 @@ class DirectedGraph(object):
             yield node
 
     def edges(self, graph=None):
+        """ iterator that yields all edges in graph as (head, tail, weight) tuples """
         if graph is None:
             graph = copy.deepcopy(self.graph)
         for head_node in self.graph:
@@ -79,36 +104,3 @@ class DirectedGraph(object):
                     int(x) for x in line.strip().split()]
                 graph[head_node][tail_node] = weight
         return num_nodes, num_edges, graph
-
-
-
-
-
-
-
-    def reweight(self, graph=None):
-        """ Reweights graph to have non-negative edge lengths while preserving shortest-path relations"""
-        if graph is None:
-            graph = copy.deepcopy(self.graph)
-
-        # insert psuedo-node with distance 0 to every node in graph
-        graph[0] = {node: 0 for node in self.nodes(graph)}
-
-        # get reweight values for each node with bellman ford algorithm
-        node_weights = self.bellman_ford_smart(graph=graph, source_node=0)
-
-        # delete pseudo-node
-        del graph[0]
-
-        # reweight nodes
-        reweighted_graph = defaultdict(dict)
-
-        for edge in self.edges(graph):
-            head_node, tail_node, weight = edge
-            reweighted_graph[head_node][tail_node] = weight + node_weights[head_node] - node_weights[tail_node]
-
-        reweighted_graph = DirectedGraph()
-
-        return reweighted_graph
-
-
