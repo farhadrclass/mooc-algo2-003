@@ -9,34 +9,39 @@ import copy
 def bellman_ford_naive(graph=None, source_node=1):
     """ """
     if graph is None:
-        graph = copy.deepcopy(self.graph)
-    source_node = int(source_node)
+        return None
 
     # setup dicts for keeping track of current and previous iterations of
     # bellman-ford algorithm
     previous_iteration = {}
-    for head_node in graph.keys():
-        previous_iteration[head_node] = float("inf")
-        for tail_node in graph[head_node].keys():
-            previous_iteration[tail_node] = float("inf")
+    for node in graph.nodes():
+        previous_iteration[node] = float("inf")
     previous_iteration[source_node] = 0
+
     current_iteration = copy.deepcopy(previous_iteration)
     newly_added_nodes = [source_node]
 
     # main body of bellman-ford algorithm
     for i in xrange(len(graph) - 1):
-        for head_node in graph:
-            for tail_node in graph[head_node]:
-                head_node_length = previous_iteration[head_node]
-                tail_node_length = previous_iteration[tail_node]
-                edge_length = graph[head_node][tail_node]
-                # print head_node, tail_node, edge_length, head_node_length
-                if head_node_length + edge_length < tail_node_length:
-                    current_iteration[
-                        tail_node] = head_node_length + edge_length
+        for edge in graph.edges():
+            head_node, tail_node, edge_length = edge
+            head_node_length = previous_iteration[head_node]
+            tail_node_length = previous_iteration[tail_node]
+
+            if head_node_length + edge_length < tail_node_length:
+                current_iteration[tail_node] = head_node_length + edge_length
         previous_iteration = copy.deepcopy(current_iteration)
 
+    # check for negative edge
+    for edge in graph.edges():
+        head_node, tail_node, edge_length = edge
+        head_node_length = current_iteration[head_node]
+        tail_node_length = current_iteration[tail_node]
+        if head_node_length + edge_length < tail_node_length:
+            return False
+
     return current_iteration
+
 def bellman_ford_smart(graph=None, source_node=1):
     """ Implementation of bellman-ford algorithm
         Why it's smart:
@@ -73,3 +78,9 @@ def bellman_ford_smart(graph=None, source_node=1):
         previous_iteration = copy.deepcopy(current_iteration)
 
     return current_iteration
+
+def detect_negative_weight_cycles(graph=None):
+    if graph is None:
+        return None
+
+

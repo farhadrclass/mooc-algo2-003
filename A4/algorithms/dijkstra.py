@@ -13,21 +13,21 @@ def dijkstra(graph=None, source_node=1):
 
         shortest_path_lengths = {}  #dict for keeping track of shortest path legnths
 
-        # Heap object to keep track of crossing cuts
+        # min heap to keep track of crossing cuts
         crossing_cuts = Heap([(float("inf"), int(node)) for node in graph.nodes()])
         crossing_cuts.update_key(source_node, 0)
 
         # main algorithm body
         while crossing_cuts:
-            # get smallest crosisng cut
+            # get smallest crossing cut cut
             shortest_cut = crossing_cuts.pop()
             head_node, path_length = shortest_cut.name, shortest_cut.key
             shortest_path_lengths[head_node] = path_length
             # update heap
-            for tail_node in set(graph[head_node]) - set(shortest_path_lengths):
+            unadded_tail_nodes = set(graph[head_node]) - set(shortest_path_lengths)
+            for tail_node in unadded_tail_nodes:
                 old_key = crossing_cuts[tail_node].key
-                new_key = shortest_path_lengths[
-                    head_node] + graph[head_node][tail_node]
+                new_key = shortest_path_lengths[head_node] + graph[head_node][tail_node]
                 if new_key < old_key:
                     crossing_cuts.update_key(tail_node, new_key)
 

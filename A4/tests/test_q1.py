@@ -53,13 +53,16 @@ class TestSequenceFunctions(unittest.TestCase):
         directed_graph = DirectedGraph(
             file_name=file_name, file_format="edge list")
         reweighted_graph = reweight(directed_graph)
-        correct_answer = {
-            1: {2: 0}, 2: {3: 0}, 3: {1: 1, 4: 0, 5: 0}, 4: {}, 5: {}, 6: {4: 2, 5: 2}}
-        self.assertTrue(reweighted_graph.graph == {
-                        1: {2: 0}, 2: {3: 0}, 3: {1: 1, 4: 0, 5: 0}, 4: {}, 5: {}, 6: {4: 2, 5: 2}})
+        correct_answer = {1: {2: 0}, 2: {3: 0}, 3: {1: 1, 4: 0, 5: 0}, 6: {4: 2, 5: 2}}
+        self.assertTrue(reweighted_graph.graph == correct_answer)
 
-    def _test_johnson(self):
+    def test_johnson_small(self):
         file_name = './data/reweight_small.txt'
-        directed_graph = dg.DirectedGraph(
-            file_name=file_name, file_format="edge list")
-        directed_graph.johnson()
+        directed_graph = DirectedGraph(file_name=file_name, file_format="edge list")
+        all_pairs_shortest_paths = johnson(directed_graph)
+
+    def test_negative_weight_cycle(self):
+        file_name = './data/negative_weight_cycle.txt'
+        directed_graph = DirectedGraph(file_name=file_name, file_format="edge list")
+        all_pairs_shortest_paths = johnson(directed_graph)
+        self.assertFalse(all_pairs_shortest_paths)
