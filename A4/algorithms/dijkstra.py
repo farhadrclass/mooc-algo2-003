@@ -1,7 +1,7 @@
 """
     dijkstra.py
     ~~~~~~~~~~~~
-    Contains Dijkstra algorithm for computing the single source shortest paths of a graph.
+    Contains Dijkstra algorithm for computing the single source shortest paths of a graph in O (|E|log|V|) time.
 """
 
 from heap import Heap

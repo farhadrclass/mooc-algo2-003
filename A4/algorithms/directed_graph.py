@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
 """
-    graph.py
+    directed_graph.py
     ~~~~~~~~~~~~
-    Contains graph algorithms for computing the all-pairs shortest path of a directed graph.
+    Contains object for represeting directed graphs.
 
 """
 
-import copy
-from heap import Heap
 from collections import defaultdict
 
 

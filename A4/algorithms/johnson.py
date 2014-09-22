@@ -1,17 +1,22 @@
 """
     johnson.py
     ~~~~~~~~~~~~
-    Contains Johnson algorithm for computing the all-pairs shortest paths of a reweighted_graph.
+    Contains Johnson algorithm for computing the all-pairs shortest paths of a graph.
 """
 import copy
 from collections import defaultdict
 from algorithms.dijkstra import dijkstra
-from algorithms.bellman_ford import bellman_ford_naive as bellman_ford
+from algorithms.bellman_ford import bellman_ford
 from heap import Heap
 
+def shortest_shortest_path(all_pairs_shortest_paths):
+    shortest_path = float("inf")
+    for node in all_pairs_shortest_paths:
+        shortest_path = min([shortest_path] + all_pairs_shortest_paths[node].values())
+    return shortest_path
 
 def reweight(graph=None):
-    """ Reweights reweighted_graph to have non-negative edge lengths while preserving shortest-path relations"""
+    """ Reweight graph to have non-negative edge lengths while preserving shortest-path relations"""
 
     if graph is None:
         return None
@@ -24,7 +29,6 @@ def reweight(graph=None):
 
     # get reweight values for each node with bellman ford algorithm
     node_weights = bellman_ford(graph=reweighted_graph, source_node=0)
-
     if not node_weights:
         return False
 
@@ -33,23 +37,29 @@ def reweight(graph=None):
 
     # reweight nodes
     for edge in reweighted_graph.edges():
-        head_node, tail_node, weight = edge
-        reweighted_graph[head_node][tail_node] = weight + node_weights[head_node] - node_weights[tail_node]
+        u, v, w = edge
+        reweighted_graph[u][v] = w + node_weights[u] - node_weights[v]
 
-    return reweighted_graph
+    return reweighted_graph, node_weights
 
 
 def johnson(directed_graph=None):
     if directed_graph is None:
         return None
     else:
-        reweighted_graph = reweight(directed_graph)
-        if not reweighted_graph:
+        results = reweight(directed_graph)
+        if not results:
             return False
-        all_pairs_shortest_paths = defaultdict(dict)
+        else:
+            reweighted_graph, node_weights = results
 
-    for node in reweighted_graph.nodes():
-        shortest_paths = dijkstra(graph=reweighted_graph, source_node=node)
-        all_pairs_shortest_paths[node] = shortest_paths
+    all_pairs_shortest_paths = defaultdict(dict)
+
+    for u in reweighted_graph.nodes():
+        shortest_paths = dijkstra(graph=reweighted_graph, source_node=u)
+        for v in shortest_paths:
+            shortest_paths[v] += (-node_weights[u] + node_weights[v])
+        all_pairs_shortest_paths[u] = shortest_paths
 
     return all_pairs_shortest_paths
+
