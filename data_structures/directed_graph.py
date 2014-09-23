@@ -20,17 +20,20 @@ class DirectedGraph(object):
     def graph(self, value):
         self._graph = value
 
-    def __init__(self, file_name=None, load_function=None, file_format="adjacency list"):
-        if load_function is None:
-            if file_name is not None:
-                if file_format == "adjacency list":
-                    self.graph = self.load_adjacency_list(file_name)
-                elif file_format == "edge list":
-                    self.num_nodes, self.num_edges, self.graph = self.load_edge_list(file_name)
+    def __init__(self, graph=None, file_name=None, load_function=None, file_format="adjacency list"):
+        if graph is None:
+            if load_function is None:
+                if file_name is not None:
+                    if file_format == "adjacency list":
+                        self.graph = self.load_adjacency_list(file_name)
+                    elif file_format == "edge list":
+                        self.num_nodes, self.num_edges, self.graph = self.load_edge_list(file_name)
+                else:
+                    return
             else:
-                return
+                self.graph = load_function(file_name)
         else:
-            self.graph = load_function(file_name)
+            self.graph = graph
 
     def __getitem__(self, key):
         return self.graph[key]
@@ -80,7 +83,7 @@ class DirectedGraph(object):
         """ iterator that yields all edges in graph as (head, tail, weight) tuples """
         for head_node in self.graph:
             for tail_node in self.graph[head_node]:
-                if type(self.graph[head_node] == 'list'):
+                if type(self.graph[head_node] == 'set'):
                     yield head_node, tail_node
                 else:
                     yield head_node, tail_node, self.graph[head_node][tail_node]
@@ -89,11 +92,11 @@ class DirectedGraph(object):
         default = self.graph.default_factory
         if default == type({}):
             graph_rev = defaultdict(dict)
-        elif default == type([]):
-            graph_rev = defaultdict(list)
+        elif default == type(set()):
+            graph_rev = defaultdict(set)
             for head_node in self.graph:
                 for tail_node in self.graph[head_node]:
-                    graph_rev[tail_node].append(head_node)
+                    graph_rev[tail_node].add(head_node)
         return graph_rev
 
 

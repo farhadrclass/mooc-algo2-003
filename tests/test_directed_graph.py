@@ -12,18 +12,18 @@ from data_structures import directed_graph as dg
 
 
 def load_edge_list(file_name):
-        graph = defaultdict(list)
+        graph = defaultdict(set)
         with open(file_name) as f:
             for line in f:
                 u, v = [ int(x) for x in line.strip().split() ]
-                graph[u].append(v)
+                graph[u].add(v)
         return graph
 def load_edge_list_rev(file_name):
-        graph = defaultdict(list)
+        graph = defaultdict(set)
         with open(file_name) as f:
             for line in f:
                 u, v = [ int(x) for x in line.strip().split() ]
-                graph[v].append(u)
+                graph[v].add(u)
         return graph
 
 class TestSequenceFunctions(unittest.TestCase):
