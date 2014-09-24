@@ -6,8 +6,6 @@
 """
 
 from collections import defaultdict
-import copy
-import Queue
 import data_structures.directed_graph as dg
 
 
@@ -21,7 +19,6 @@ def depth_first_search(directed_graph):
     finishing_time = 0
     finishing_times = {}
     leaders = {}
-
     unvisited_queue = [node for node in sorted(directed_graph.nodes())]
     backtrack_queue = []
 

@@ -3,12 +3,11 @@
 """
     directed_graph.py
     ~~~~~~~~~~~~
-    Contains object for represeting directed graphs.
+    Contains object for representing directed graphs.
 
 """
 
 from collections import defaultdict
-
 
 class DirectedGraph(object):
 
@@ -27,7 +26,8 @@ class DirectedGraph(object):
                     if file_format == "adjacency list":
                         self.graph = self.load_adjacency_list(file_name)
                     elif file_format == "edge list":
-                        self.num_nodes, self.num_edges, self.graph = self.load_edge_list(file_name)
+                        self.num_nodes, self.num_edges, self.graph = self.load_edge_list(
+                            file_name)
                 else:
                     return
             else:
@@ -99,9 +99,6 @@ class DirectedGraph(object):
                     graph_rev[tail_node].add(head_node)
         return graph_rev
 
-
-
-        return graph_rev
     def load_adjacency_list(self, file_name):
         graph = defaultdict(dict)
         with open(file_name) as f:
@@ -123,4 +120,3 @@ class DirectedGraph(object):
                     int(x) for x in line.strip().split()]
                 graph[head_node][tail_node] = weight
         return num_nodes, num_edges, graph
-
