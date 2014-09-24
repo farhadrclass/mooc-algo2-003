@@ -9,6 +9,7 @@
 
 from collections import defaultdict
 
+
 class DirectedGraph(object):
 
     @property
@@ -83,7 +84,8 @@ class DirectedGraph(object):
         """ iterator that yields all edges in graph as (head, tail, weight) tuples """
         for head_node in self.graph:
             for tail_node in self.graph[head_node]:
-                if type(self.graph[head_node] == 'set'):
+                if self.graph.default_factory == type(set()):
+                    print True
                     yield head_node, tail_node
                 else:
                     yield head_node, tail_node, self.graph[head_node][tail_node]

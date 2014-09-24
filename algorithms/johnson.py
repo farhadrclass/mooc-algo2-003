@@ -9,6 +9,7 @@ from algorithms.dijkstra import dijkstra
 from algorithms.bellman_ford import bellman_ford
 from heap import Heap
 
+
 def shortest_shortest_path(all_pairs_shortest_paths):
     shortest_path = float("inf")
     for node in all_pairs_shortest_paths:

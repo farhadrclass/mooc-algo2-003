@@ -6,6 +6,7 @@
 
 import copy
 
+
 def bellman_ford(graph=None, source_node=1):
     """ """
     if graph is None:
