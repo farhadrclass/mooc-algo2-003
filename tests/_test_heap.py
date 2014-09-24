@@ -5,12 +5,16 @@
     ~~~~~~~~~~~~
     Tests for heap.py to ensure it implements insert, delete, pop operations correctly while maintaining the heap invariant that all parent nodes < children nodes.
 
+    runtime:
+    real    0m0.221s
+    user    0m0.189s
+    sys 0m0.028s
+
 """
 
-from heap.heap import Node, Heap
+from data_structures.heap import Node, Heap
 import random
 import unittest
-
 
 class TestSequenceFunctions(unittest.TestCase):
 
@@ -18,18 +22,18 @@ class TestSequenceFunctions(unittest.TestCase):
         self.heap = Heap([(int(x), str(x))
                           for x in random.sample(xrange(10, 90), 10)])
 
-    def _test_Node_init(self):
+    def test_Node_init(self):
         node = Node(name="name", key="key")
         node.pos = 0
         self.assertTrue(
             all((node.name == "name", node.key == "key", node.pos == 0)))
 
-    def _test_Node_cmp(self):
+    def test_Node_cmp(self):
         node1 = Node(20, "node1")
         node2 = Node(1, "node2")
         self.assertTrue(node2 < node1)
 
-    def _test_Heap_init(self):
+    def test_Heap_init(self):
         node1 = (20, "node1")
         node2 = (1, "node2")
         self.heap = Heap([node1, node2], named=True)
@@ -37,7 +41,6 @@ class TestSequenceFunctions(unittest.TestCase):
             self.heap["node1"].pos == 1 and self.heap["node2"].pos == 0)
 
     def test_Heap_bubble_up(self):
-
         node = Node(1, "1")
         node.pos = len(self.heap.node_array)
         self.heap.node_array.append(node)
@@ -98,6 +101,3 @@ class TestSequenceFunctions(unittest.TestCase):
         self.heap.update_key(node_name, new_key)
         self.assertTrue(self.heap.is_heap_property_satisfied())
 
-
-if __name__ == '__main__':
-    unittest.main()
