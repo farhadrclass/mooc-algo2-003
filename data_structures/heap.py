@@ -110,7 +110,6 @@ class Heap(object):
         self.bubble_down(self[node_name].pos)
 
     def delete(self, node):
-
         if node != self.node_array[-1]:
             original_pos = node.pos
             self.swap_nodes(node, self.node_array[-1])
